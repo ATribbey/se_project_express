@@ -4,8 +4,10 @@
   "description": "WTWR Back-end",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-	"lint": "npx eslint ."
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint ."
   },
   "author": "Alexander Tribbey",
   "license": "ISC",
