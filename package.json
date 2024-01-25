@@ -2,7 +2,7 @@
   "name": "se_project_express",
   "version": "1.0.0",
   "description": "WTWR Back-end",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
 	"lint": "npx eslint ."
