@@ -34,3 +34,5 @@ const clothingItemSchema = new mongoose.Schema({
     type: Date,
   },
 });
+
+module.exports = mongoose.model("clothingItems", clothingItemSchema);
