@@ -3,11 +3,45 @@ const express = require("express");
 const app = express();
 
 /* Steps for Running Server:
-- Use Bash to run mongod.exe using: "C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath="c:\data\db"
-- Use Mongosh to access server using: "mongodb://127.0.0.1:27017/wtwr_db"
+- Use Bash to run mongod.exe using: 'C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe' --dbpath='c:\data\db'
+- Use Mongosh to access server using: 'mongodb://127.0.0.1:27017/wtwr_db'
 - Use terminal in project to run express application using either of the following:
   - npm run dev
   - npm run start
+*/
+
+/*
+- Trace through: schema -> model -> controller -> route -> entry flow on platform
+  - Schema: The predetermined structure by which each resource in a given DB must be formatted.
+  - Model: A wrapper / constructor of the afforementioned schema.
+    - https://mongoosejs.com/docs/models.html
+    - Because of this, it allows the user to read, add, update, and delete documents (instances of a model) on the DB.
+    - Created by: mongoose.model('SINGULAR-name-of-collection', schema-name)
+      - Reason for singular name: Mongoose automatically looks for plural lowercase version of name.
+        - 'User' -> Mongoose looks for 'users'
+  - Controller: Collection of request handlers for a given model (in this case, either clothingItem or user).
+    - These handlers are passed as callbacks to Router requests (ie. router.get('/', controllerExample))
+    - After getting to a route, controllers are the things that manipulate info.
+  - Router: Determines how an application responds to a client request to a particular endpoint,
+    which is a Url (or path) and a specific HTTP request method.
+    - https://expressjs.com/en/starter/basic-routing.html
+    - https://expressjs.com/en/guide/routing.html
+    - Created by: expressApplication.httpRequest('path', handler)
+      - expressApplication corresponsds to the entry point upon which express(); was called. See line 3.
+      - httpRequest corresponds to HTTP request method in lowercase (ie. get, post, delete, etc.)
+      - 'path' corresponds to path (ie. '/user' '/items')
+      - handler corresponds to the controller that will be passed to the router
+*/
+
+/*
+- General Flow
+  - Schema / Model is created in order to create uniform DB
+    - Model is passed to Controllers
+      - Controller handlers are defined
+        - Controllers are passed to Router
+          - Router is exported
+            - Entry point grabs onto the router by way of 
+              app.use('/clothingItems', require('./routes/clothingItem.js'))
 */
 
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
