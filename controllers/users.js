@@ -11,7 +11,7 @@ function getUsers(req, res) {
     });
 }
 
-function getUserById(req, res) {
+function getUser(req, res) {
   user
     .findById(req.params.id)
     .then((user) => {
@@ -35,4 +35,4 @@ function createUser(req, res) {
     });
 }
 
-module.exports = { getUsers, getUserById, createUser };
+module.exports = { getUsers, getUser, createUser };
