@@ -34,17 +34,33 @@ const app = express();
 */
 
 /*
+- Model Methods
+  - Create: create()
+  - Read: findById(), findOne(), find()
+  - Update: findByIdAndUpdate(), findOneAndUpdate(), updateOne(), updateMany()
+  - Delete: findByIdAndRemove(), findOneAndRemove(), delete(), deleteMany()
+*/
+
+/*
 - General Flow
   - Schema / Model is created in order to create uniform DB
     - Model is passed to Controllers
       - Controller handlers are defined
         - Controllers are passed to Router
           - Router is exported
-            - Entry point grabs onto the router by way of
-              app.use('/clothingItems', require('./routes/clothingItem.js'))
+            - Import Router to Index.js
+              - Tie Router to proper path
+                - Export Router from Index.js
+                  - Define Routes
+                  - Tie router to entry point by app.use(routes);
 */
 
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
+
+const routes = require("./routes");
+
+app.use(routes);
+app.use(express.json());
 
 const { PORT = 3001 } = process.env;
 
