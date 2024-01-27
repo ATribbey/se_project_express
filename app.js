@@ -63,6 +63,14 @@ app.use(express.json());
 
 app.use(routes);
 
+// TEMPORARY WORKAROUND FOR OWNER PROPERTY
+app.use((req, res, next) => {
+  req.user = {
+    _id: "65b57113f73c1d54f08cc2a5",
+  };
+  next();
+});
+
 const { PORT = 3001 } = process.env;
 
 app.listen(PORT, () => {
