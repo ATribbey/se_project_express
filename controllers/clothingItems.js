@@ -13,7 +13,20 @@ function getItems(req, res) {
     });
 }
 
-function createItem(req, res) {}
+function createItem(req, res) {
+  const { name, weather, imageUrl, owner, likes, createdAt } = req.body;
+
+  clothingItem
+    .create({ name, weather, imageUrl, owner, likes, createdAt })
+    .then((item) => {
+      res.send({ data: item });
+    })
+    .catch((e) => {
+      res
+        .status(500)
+        .send({ message: `An error occurred due to the following ${e}` });
+    });
+}
 
 function deleteItem(req, res) {}
 
