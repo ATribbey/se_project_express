@@ -28,6 +28,17 @@ function createItem(req, res) {
     });
 }
 
-function deleteItem(req, res) {}
+function deleteItem(req, res) {
+  clothingItem
+    .findByIdAndDelete(req.params.id)
+    .then((item) => {
+      res.send({ data: item });
+    })
+    .catch((e) =>
+      res
+        .status(500)
+        .send({ message: `An error occurred due to the following ${e}` }),
+    );
+}
 
 module.exports = { getItems, createItem, deleteItem };
