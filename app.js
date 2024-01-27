@@ -40,7 +40,7 @@ const app = express();
       - Controller handlers are defined
         - Controllers are passed to Router
           - Router is exported
-            - Entry point grabs onto the router by way of 
+            - Entry point grabs onto the router by way of
               app.use('/clothingItems', require('./routes/clothingItem.js'))
 */
 
