@@ -7,7 +7,9 @@ function getUsers(req, res) {
       res.send({ data: users });
     })
     .catch((e) => {
-      res.status(500).send({ message: `An error occurred due to ${e}` });
+      res
+        .status(500)
+        .send({ message: `An error occurred due to the following ${e}` });
     });
 }
 
@@ -18,7 +20,9 @@ function getUser(req, res) {
       res.send({ data: user });
     })
     .catch((e) =>
-      res.status(500).send({ message: `An error occurred due to ${e}` }),
+      res
+        .status(500)
+        .send({ message: `An error occurred due to the following ${e}` }),
     );
 }
 
@@ -31,7 +35,9 @@ function createUser(req, res) {
       res.send({ data: user });
     })
     .catch((e) => {
-      res.status(500).send({ message: `An error Occurred due to ${e}` });
+      res
+        .status(500)
+        .send({ message: `An error occurred due to the following ${e}` });
     });
 }
 
