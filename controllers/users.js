@@ -11,6 +11,17 @@ function getUsers(req, res) {
     });
 }
 
+function getUserById(req, res) {
+  user
+    .findById(req.params.id)
+    .then((user) => {
+      res.send({ data: user });
+    })
+    .catch((e) =>
+      res.status(500).send({ message: `An error occurred due to ${e}` }),
+    );
+}
+
 function createUser(req, res) {
   const { name, avatar } = req.body;
 
@@ -20,8 +31,8 @@ function createUser(req, res) {
       res.send({ data: user });
     })
     .catch((e) => {
-      res.status(500).send({ message: `An Error Occurred due to ${e}` });
+      res.status(500).send({ message: `An error Occurred due to ${e}` });
     });
 }
 
-module.exports = { getUsers, createUser };
+module.exports = { getUsers, getUserById, createUser };
