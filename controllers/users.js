@@ -19,8 +19,8 @@ function createUser(req, res) {
     .then((user) => {
       res.send({ data: user });
     })
-    .catch(() => {
-      res.status(500).send({ message: "An Error Occurred" });
+    .catch((e) => {
+      res.status(500).send({ message: `An Error Occurred due to ${e}` });
     });
 }
 
