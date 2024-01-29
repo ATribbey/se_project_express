@@ -36,7 +36,7 @@ function createItem(req, res) {
       console.log(e);
 
       if (e.name === "ValidationError" || "CastError") {
-        res.status(invalidDataError).send({ message: "Bad Request" });
+        res.status(invalidDataError).send({ message: e.message });
       } else {
         res.status(serverError).send({ message: e.message });
       }
@@ -54,7 +54,7 @@ function deleteItem(req, res) {
       console.error(e);
 
       if (e.name === "ValidationError" || "CastError") {
-        res.status(invalidDataError).send({ message: "Bad Request" });
+        res.status(invalidDataError).send({ message: e.message });
       } else if (e.name === "DocumentNotFoundError") {
         res
           .status(notFoundError)
@@ -66,9 +66,55 @@ function deleteItem(req, res) {
 }
 
 function likeItem(req, res) {
-  clothingItem.findByIdAndUpdate();
+  clothingItem
+    .findByIdAndUpdate(
+      req.params.id,
+      { $addToSet: { likes: req.user._id } },
+      { new: true },
+    )
+    .orFail()
+    .then((item) => {
+      res.status(200).send(item);
+    })
+    .catch((e) => {
+      console.error(e);
+
+      if (e.name === "ValidationError" || "CastError") {
+        res.status(invalidDataError).send({ message: e.message });
+      } else if (e.name === "DocumentNotFoundError") {
+        res
+          .status(notFoundError)
+          .send({ message: "Requested document not found" });
+      } else {
+        res.status(serverError).send({ message: e.message });
+      }
+    });
 }
 
-function dislikeItem(req, res) {}
+function dislikeItem(req, res) {
+  clothingItem
+    .findByIdAndUpdate(
+      req.params.id,
+      { $pull: { likes: req.user._id } },
+      { new: true },
+    )
+    .orFail()
+    .then((item) => {
+      res.status(200).send(item);
+    })
+    .catch((e) => {
+      console.error(e);
+
+      if (e.name === "ValidationError" || "CastError") {
+        res.status(invalidDataError).send({ message: e.message });
+      } else if (e.name === "DocumentNotFoundError") {
+        res
+          .status(notFoundError)
+          .send({ message: "Requested document not found" });
+      } else {
+        res.status(serverError).send({ message: e.message });
+      }
+    });
+}
 
 module.exports = { getItems, createItem, deleteItem, likeItem, dislikeItem };

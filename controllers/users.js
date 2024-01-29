@@ -29,9 +29,9 @@ function getUser(req, res) {
       console.error(e);
 
       if (e.name === "ValidationError" || "CastError") {
-        res.status(invalidDataError).send({ message: "Bad Request" });
+        res.status(invalidDataError).send({ message: e.message });
       } else if (e.name === "DocumentNotFoundError") {
-        res.status(notFoundError).send({ message: "Requested user not found" });
+        res.status(notFoundError).send({ message: e.message });
       } else {
         res.status(serverError).send({ message: e.message });
       }
@@ -50,7 +50,7 @@ function createUser(req, res) {
       console.error(e);
 
       if (e.name === "ValidationError" || "CastError") {
-        res.status(invalidDataError).send({ message: "Bad Request" });
+        res.status(invalidDataError).send({ message: e.message });
       } else {
         res.status(serverError).send({ message: e.message });
       }
