@@ -8,6 +8,7 @@ const {
 function getItems(req, res) {
   clothingItem
     .find({})
+    .orFail()
     .then((items) => {
       res.status(200).send({ data: items });
     })
@@ -25,6 +26,7 @@ function createItem(req, res) {
 
   clothingItem
     .create({ name, weather, imageUrl, owner })
+    .orFail()
     .then((item) => {
       res.status(200).send({ data: item });
     })
@@ -44,6 +46,7 @@ function createItem(req, res) {
 function deleteItem(req, res) {
   clothingItem
     .findByIdAndDelete(req.params.id)
+    .orFail()
     .then((item) => {
       res.status(200).send({ data: item });
     })
