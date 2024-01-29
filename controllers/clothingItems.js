@@ -14,10 +14,12 @@ function getItems(req, res) {
 }
 
 function createItem(req, res) {
-  const { name, weather, imageUrl, owner, likes, createdAt } = req.body;
+  const { name, weather, imageUrl } = req.body;
+
+  const owner = req.user._id;
 
   clothingItem
-    .create({ name, weather, imageUrl, owner, likes, createdAt })
+    .create({ name, weather, imageUrl, owner })
     .then((item) => {
       res.send({ data: item });
     })

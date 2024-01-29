@@ -60,7 +60,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
 // TEMPORARY WORKAROUND FOR OWNER PROPERTY
 app.use((req, res, next) => {
   req.user = {
-    _id: "65b57113f73c1d54f08cc2a5",
+    _id: "65b581c3a6b301d47eb626d1",
   };
   next();
 });
