@@ -1,15 +1,20 @@
 const user = require("../models/user");
+const {
+  invalidDataError,
+  notFoundError,
+  serverError,
+} = require("../utils/errors");
 
 function getUsers(req, res) {
   user
     .find({})
     .then((users) => {
-      res.send({ data: users });
+      res.status(200).send({ data: users });
     })
     .catch((e) => {
-      res
-        .status(500)
-        .send({ message: `An error occurred due to the following ${e}` });
+      console.error(e);
+
+      res.status(serverError).send({ message: e.message });
     });
 }
 
@@ -17,13 +22,19 @@ function getUser(req, res) {
   user
     .findById(req.params.id)
     .then((user) => {
-      res.send({ data: user });
+      res.status(200).send({ data: user });
     })
-    .catch((e) =>
-      res
-        .status(500)
-        .send({ message: `An error occurred due to the following ${e}` }),
-    );
+    .catch((e) => {
+      console.error(e);
+
+      if (e.name === "ValidationError" || "CastError") {
+        res.status(invalidDataError).send({ message: "Invalid input" });
+      } else if (e.name === "DocumentNotFoundError") {
+        res.status(notFoundError).send({ message: "Requested user not found" });
+      } else {
+        res.status(serverError).send({ message: e.message });
+      }
+    });
 }
 
 function createUser(req, res) {
@@ -32,12 +43,16 @@ function createUser(req, res) {
   user
     .create({ name, avatar })
     .then((user) => {
-      res.send({ data: user });
+      res.stats(200).send({ data: user });
     })
     .catch((e) => {
-      res
-        .status(500)
-        .send({ message: `An error occurred due to the following ${e}` });
+      console.error(e);
+
+      if (e.name === "ValidationError" || "CastError") {
+        res.status(invalidDataError).send({ message: "Invalid input" });
+      } else {
+        res.status(serverError).send({ message: e.message });
+      }
     });
 }
 
