@@ -62,4 +62,8 @@ function deleteItem(req, res) {
     });
 }
 
-module.exports = { getItems, createItem, deleteItem };
+function likeItem() {}
+
+function dislikeItem() {}
+
+module.exports = { getItems, createItem, deleteItem, likeItem, dislikeItem };
