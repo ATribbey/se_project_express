@@ -62,8 +62,10 @@ function deleteItem(req, res) {
     });
 }
 
-function likeItem() {}
+function likeItem(req, res) {
+  clothingItem.findByIdAndUpdate();
+}
 
-function dislikeItem() {}
+function dislikeItem(req, res) {}
 
 module.exports = { getItems, createItem, deleteItem, likeItem, dislikeItem };

@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 
+mongoose.set("strictQuery", true);
+
 /* Steps for Running Server:
 - Use Bash to run mongod.exe using: 'C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe' --dbpath='c:\data\db'
 - Use Mongosh to access server using: 'mongodb://127.0.0.1:27017/wtwr_db'
