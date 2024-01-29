@@ -26,7 +26,6 @@ function createItem(req, res) {
 
   clothingItem
     .create({ name, weather, imageUrl, owner })
-    .orFail()
     .then((item) => {
       res.status(200).send({ data: item });
     })
@@ -35,7 +34,9 @@ function createItem(req, res) {
 
       console.log(e);
 
-      if (e.name === "ValidationError" || "CastError") {
+      if (e.name === "ValidationError") {
+        res.status(invalidDataError).send({ message: e.message });
+      } else if (e.name === "CastError") {
         res.status(invalidDataError).send({ message: e.message });
       } else {
         res.status(serverError).send({ message: e.message });
@@ -53,12 +54,12 @@ function deleteItem(req, res) {
     .catch((e) => {
       console.error(e);
 
-      if (e.name === "ValidationError" || "CastError") {
+      if (e.name === "ValidationError") {
+        res.status(invalidDataError).send({ message: e.message });
+      } else if (e.name === "CastError") {
         res.status(invalidDataError).send({ message: e.message });
       } else if (e.name === "DocumentNotFoundError") {
-        res
-          .status(notFoundError)
-          .send({ message: "Requested document not found" });
+        res.status(notFoundError).send({ message: e.message });
       } else {
         res.status(serverError).send({ message: e.message });
       }
@@ -79,12 +80,12 @@ function likeItem(req, res) {
     .catch((e) => {
       console.error(e);
 
-      if (e.name === "ValidationError" || "CastError") {
+      if (e.name === "ValidationError") {
+        res.status(invalidDataError).send({ message: e.message });
+      } else if (e.name === "CastError") {
         res.status(invalidDataError).send({ message: e.message });
       } else if (e.name === "DocumentNotFoundError") {
-        res
-          .status(notFoundError)
-          .send({ message: "Requested document not found" });
+        res.status(notFoundError).send({ message: e.message });
       } else {
         res.status(serverError).send({ message: e.message });
       }
@@ -105,12 +106,12 @@ function dislikeItem(req, res) {
     .catch((e) => {
       console.error(e);
 
-      if (e.name === "ValidationError" || "CastError") {
+      if (e.name === "ValidationError") {
+        res.status(invalidDataError).send({ message: e.message });
+      } else if (e.name === "CastError") {
         res.status(invalidDataError).send({ message: e.message });
       } else if (e.name === "DocumentNotFoundError") {
-        res
-          .status(notFoundError)
-          .send({ message: "Requested document not found" });
+        res.status(notFoundError).send({ message: e.message });
       } else {
         res.status(serverError).send({ message: e.message });
       }

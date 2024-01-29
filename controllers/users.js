@@ -27,8 +27,11 @@ function getUser(req, res) {
     })
     .catch((e) => {
       console.error(e);
+      console.log(e.name);
 
-      if (e.name === "ValidationError" || "CastError") {
+      if (e.name === "ValidationError") {
+        res.status(invalidDataError).send({ message: e.message });
+      } else if (e.name === "CastError") {
         res.status(invalidDataError).send({ message: e.message });
       } else if (e.name === "DocumentNotFoundError") {
         res.status(notFoundError).send({ message: e.message });
@@ -44,12 +47,14 @@ function createUser(req, res) {
   user
     .create({ name, avatar })
     .then((user) => {
-      res.stats(200).send({ data: user });
+      res.status(200).send({ data: user });
     })
     .catch((e) => {
       console.error(e);
 
-      if (e.name === "ValidationError" || "CastError") {
+      if (e.name === "ValidationError") {
+        res.status(invalidDataError).send({ message: e.message });
+      } else if (e.name === "CastError") {
         res.status(invalidDataError).send({ message: e.message });
       } else {
         res.status(serverError).send({ message: e.message });
