@@ -34,7 +34,7 @@ function createItem(req, res) {
       console.log(e);
 
       if (e.name === "ValidationError" || "CastError") {
-        res.status(invalidDataError).send({ message: "Invalid input" });
+        res.status(invalidDataError).send({ message: "Bad Request" });
       } else {
         res.status(serverError).send({ message: e.message });
       }
@@ -51,7 +51,7 @@ function deleteItem(req, res) {
       console.error(e);
 
       if (e.name === "ValidationError" || "CastError") {
-        res.status(invalidDataError).send({ message: "Invalid input" });
+        res.status(invalidDataError).send({ message: "Bad Request" });
       } else if (e.name === "DocumentNotFoundError") {
         res
           .status(notFoundError)

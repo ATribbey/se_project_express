@@ -21,6 +21,7 @@ function getUsers(req, res) {
 function getUser(req, res) {
   user
     .findById(req.params.id)
+    .orFail()
     .then((user) => {
       res.status(200).send({ data: user });
     })
@@ -28,7 +29,7 @@ function getUser(req, res) {
       console.error(e);
 
       if (e.name === "ValidationError" || "CastError") {
-        res.status(invalidDataError).send({ message: "Invalid input" });
+        res.status(invalidDataError).send({ message: "Bad Request" });
       } else if (e.name === "DocumentNotFoundError") {
         res.status(notFoundError).send({ message: "Requested user not found" });
       } else {
@@ -49,7 +50,7 @@ function createUser(req, res) {
       console.error(e);
 
       if (e.name === "ValidationError" || "CastError") {
-        res.status(invalidDataError).send({ message: "Invalid input" });
+        res.status(invalidDataError).send({ message: "Bad Request" });
       } else {
         res.status(serverError).send({ message: e.message });
       }
