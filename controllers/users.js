@@ -1,4 +1,5 @@
 const user = require("../models/user");
+
 const {
   invalidDataError,
   notFoundError,
@@ -14,7 +15,9 @@ function getUsers(req, res) {
     .catch((e) => {
       console.error(e);
 
-      res.status(serverError).send({ message: e.message });
+      res
+        .status(serverError)
+        .send({ message: "An error occurred on the server" });
     });
 }
 
@@ -22,21 +25,25 @@ function getUser(req, res) {
   user
     .findById(req.params.id)
     .orFail()
-    .then((user) => {
-      res.status(200).send({ data: user });
+    .then((specifiedUser) => {
+      res.status(200).send({ data: specifiedUser });
     })
     .catch((e) => {
       console.error(e);
       console.log(e.name);
 
       if (e.name === "ValidationError") {
-        res.status(invalidDataError).send({ message: e.message });
+        res.status(invalidDataError).send({ message: "Invalid data" });
       } else if (e.name === "CastError") {
-        res.status(invalidDataError).send({ message: e.message });
+        res.status(invalidDataError).send({ message: "Invalid data" });
       } else if (e.name === "DocumentNotFoundError") {
-        res.status(notFoundError).send({ message: e.message });
+        res
+          .status(notFoundError)
+          .send({ message: "Requested resource not found" });
       } else {
-        res.status(serverError).send({ message: e.message });
+        res
+          .status(serverError)
+          .send({ message: "An error occurred on the server" });
       }
     });
 }
@@ -46,18 +53,20 @@ function createUser(req, res) {
 
   user
     .create({ name, avatar })
-    .then((user) => {
-      res.status(200).send({ data: user });
+    .then((newUser) => {
+      res.status(200).send({ data: newUser });
     })
     .catch((e) => {
       console.error(e);
 
       if (e.name === "ValidationError") {
-        res.status(invalidDataError).send({ message: e.message });
+        res.status(invalidDataError).send({ message: "Invalid data" });
       } else if (e.name === "CastError") {
-        res.status(invalidDataError).send({ message: e.message });
+        res.status(invalidDataError).send({ message: "Invalid data" });
       } else {
-        res.status(serverError).send({ message: e.message });
+        res
+          .status(serverError)
+          .send({ message: "An error occurred on the server" });
       }
     });
 }
