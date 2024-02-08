@@ -49,7 +49,7 @@ function getUser(req, res) {
 }
 
 function createUser(req, res) {
-  const { name, avatar, email } = req.body;
+  const { name, avatar, email, password } = req.body;
 
   user.findOne({ email }).then((existingUser) => {
     if (existingUser) {
@@ -57,7 +57,7 @@ function createUser(req, res) {
     }
   });
 
-  bcrypt.hash(req.body.password, 10).then((hash) => {
+  bcrypt.hash(password, 10).then((hash) => {
     user
       .create({ name, avatar, email, hash })
       .then((newUser) => {
