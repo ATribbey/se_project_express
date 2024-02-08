@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const user = require("../models/user");
 
 const {
@@ -49,7 +49,7 @@ function getUser(req, res) {
 }
 
 function createUser(req, res) {
-  const { name, avatar, email, password } = req.body;
+  const { name, avatar, email } = req.body;
 
   user.findOne({ email }).then((existingUser) => {
     if (existingUser) {
@@ -57,28 +57,30 @@ function createUser(req, res) {
     }
   });
 
-  user
-    .create({ name, avatar, email, password })
-    .then((newUser) => {
-      res.status(200).send({ data: newUser });
-    })
-    .catch((e) => {
-      console.error(e);
+  bcrypt.hash(req.body.password, 10).then((hash) => {
+    user
+      .create({ name, avatar, email, hash })
+      .then((newUser) => {
+        res.status(200).send({ data: newUser });
+      })
+      .catch((e) => {
+        console.error(e);
 
-      if (e.name === "ValidationError") {
-        res.status(invalidDataError).send({ message: "Invalid data" });
-      } else if (e.name === "CastError") {
-        res.status(invalidDataError).send({ message: "Invalid data" });
-      } else if (e.name === "Email already in use") {
-        res
-          .status(serverError)
-          .send({ message: "An account with this email already exists" });
-      } else {
-        res
-          .status(serverError)
-          .send({ message: "An error occurred on the server" });
-      }
-    });
+        if (e.name === "ValidationError") {
+          res.status(invalidDataError).send({ message: "Invalid data" });
+        } else if (e.name === "CastError") {
+          res.status(invalidDataError).send({ message: "Invalid data" });
+        } else if (e.name === "Email already in use") {
+          res
+            .status(serverError)
+            .send({ message: "An account with this email already exists" });
+        } else {
+          res
+            .status(serverError)
+            .send({ message: "An error occurred on the server" });
+        }
+      });
+  });
 }
 
 module.exports = { getUsers, getUser, createUser };
