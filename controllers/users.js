@@ -50,6 +50,12 @@ function getUser(req, res) {
 function createUser(req, res) {
   const { name, avatar, email, password } = req.body;
 
+  user.findOne({ email }).then((existingUser) => {
+    if (existingUser) {
+      throw new Error("Email already in use");
+    }
+  });
+
   user
     .create({ name, avatar, email, password })
     .then((newUser) => {
@@ -62,7 +68,7 @@ function createUser(req, res) {
         res.status(invalidDataError).send({ message: "Invalid data" });
       } else if (e.name === "CastError") {
         res.status(invalidDataError).send({ message: "Invalid data" });
-      } else if (e.name === "MongoServerError") {
+      } else if (e.name === "Email already in use") {
         res
           .status(serverError)
           .send({ message: "An account with this email already exists" });
