@@ -62,6 +62,10 @@ function createUser(req, res) {
         res.status(invalidDataError).send({ message: "Invalid data" });
       } else if (e.name === "CastError") {
         res.status(invalidDataError).send({ message: "Invalid data" });
+      } else if (e.name === "MongoServerError") {
+        res
+          .status(serverError)
+          .send({ message: "An account with this email already exists" });
       } else {
         res
           .status(serverError)
