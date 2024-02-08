@@ -30,7 +30,6 @@ function getUser(req, res) {
     })
     .catch((e) => {
       console.error(e);
-      console.log(e.name);
 
       if (e.name === "ValidationError") {
         res.status(invalidDataError).send({ message: "Invalid data" });
@@ -49,10 +48,10 @@ function getUser(req, res) {
 }
 
 function createUser(req, res) {
-  const { name, avatar } = req.body;
+  const { name, avatar, email, password } = req.body;
 
   user
-    .create({ name, avatar })
+    .create({ name, avatar, email, password })
     .then((newUser) => {
       res.status(200).send({ data: newUser });
     })
