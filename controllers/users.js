@@ -106,7 +106,6 @@ function login(req, res) {
       })
       .catch((e) => {
         console.error(e);
-        console.log(e.name);
 
         if (e.message === "Incorrect email or password") {
           res
