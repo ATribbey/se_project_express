@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const user = require("../models/user");
+const User = require("../models/user");
 const JWT_SECRET = require("../utils/config");
 
 const {
@@ -11,8 +11,7 @@ const {
 } = require("../utils/errors");
 
 function getUsers(req, res) {
-  user
-    .find({})
+  User.find({})
     .then((users) => {
       res.status(200).send({ data: users });
     })
@@ -26,8 +25,7 @@ function getUsers(req, res) {
 }
 
 function getUser(req, res) {
-  user
-    .findById(req.params.id)
+  User.findById(req.params.id)
     .orFail()
     .then((specifiedUser) => {
       res.status(200).send({ data: specifiedUser });
@@ -54,15 +52,14 @@ function getUser(req, res) {
 function createUser(req, res) {
   const { name, avatar, email, password } = req.body;
 
-  user.findOne({ email }).then((existingUser) => {
+  User.findOne({ email }).then((existingUser) => {
     if (existingUser) {
       throw new Error("Email already in use");
     }
   });
 
   bcrypt.hash(password, 10).then((hash) => {
-    user
-      .create({ name, avatar, email, password: hash })
+    User.create({ name, avatar, email, password: hash })
       .then((newUser) => {
         res.status(200).send({ data: newUser });
       })
@@ -89,7 +86,7 @@ function createUser(req, res) {
 function login(req, res) {
   const { email, password } = req.body;
 
-  return user.findOne({ email }).then((existingUser) => {
+  return User.findOne({ email }).then((existingUser) => {
     if (!existingUser) {
       return Promise.reject(new Error("Incorrect email or password"));
     }
