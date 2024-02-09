@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const user = require("../models/user");
-const JWT_SECRET = require("../utils/JWT_Key");
+const JWT_SECRET = require("../utils/config");
 
 const {
   invalidDataError,
