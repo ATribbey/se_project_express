@@ -5,6 +5,7 @@ const {
   invalidDataError,
   notFoundError,
   serverError,
+  unauthorizedError,
 } = require("../utils/errors");
 
 function getUsers(req, res) {
@@ -83,4 +84,27 @@ function createUser(req, res) {
   });
 }
 
-module.exports = { getUsers, getUser, createUser };
+function login(req, res) {
+  const { email, password } = req.body;
+
+  return user.findOne({ email }).then((existingUser) => {
+    if (!existingUser) {
+      return Promise.reject(new Error("Incorrect email or password"));
+    }
+
+    return bcrypt
+      .compare(password, existingUser.password)
+      .then((matched) => {
+        if (!matched) {
+          return Promise.reject(new Error("Incorrect email or password"));
+        }
+
+        return existingUser;
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  });
+}
+
+module.exports = { getUsers, getUser, createUser, login };
