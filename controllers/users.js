@@ -1,5 +1,7 @@
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const user = require("../models/user");
+const JWT_SECRET = require("../utils/JWT_Key");
 
 const {
   invalidDataError,
@@ -99,6 +101,10 @@ function login(req, res) {
           return Promise.reject(new Error("Incorrect email or password"));
         }
 
+        const token = jwt.sign({ _id: existingUser._id }, JWT_SECRET, {
+          expiresIn: "120ms",
+        });
+        res.send(token);
         return existingUser;
       })
       .catch((e) => {
