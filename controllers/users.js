@@ -52,11 +52,19 @@ function getUser(req, res) {
 function createUser(req, res) {
   const { name, avatar, email, password } = req.body;
 
-  User.findOne({ email }).then((existingUser) => {
-    if (existingUser) {
-      throw new Error("Email already in use");
-    }
-  });
+  User.findOne({ email })
+    .then((existingUser) => {
+      if (existingUser) {
+        throw new Error("Email already in use");
+      }
+    })
+    .catch((e) => {
+      if (e.message === "Email already in use") {
+        res
+          .status(serverError)
+          .send({ message: "An account with this email already exists" });
+      }
+    });
 
   bcrypt.hash(password, 10).then((hash) => {
     User.create({ name, avatar, email, password: hash })
@@ -70,10 +78,6 @@ function createUser(req, res) {
           res.status(invalidDataError).send({ message: "Invalid data" });
         } else if (e.name === "CastError") {
           res.status(invalidDataError).send({ message: "Invalid data" });
-        } else if (e.name === "Email already in use") {
-          res
-            .status(serverError)
-            .send({ message: "An account with this email already exists" });
         } else {
           res
             .status(serverError)
