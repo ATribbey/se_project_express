@@ -104,7 +104,7 @@ function login(req, res) {
         const token = jwt.sign({ _id: existingUser._id }, JWT_SECRET, {
           expiresIn: "120ms",
         });
-        res.send(token);
+        res.status(200).send({ data: token });
         return existingUser;
       })
       .catch((e) => {
