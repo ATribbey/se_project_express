@@ -109,6 +109,16 @@ function login(req, res) {
       })
       .catch((e) => {
         console.error(e);
+
+        if (e.name === "Incorrect email or password") {
+          res
+            .status(unauthorizedError)
+            .send({ message: "Incorrect email or password" });
+        } else {
+          res
+            .status(serverError)
+            .send({ message: "An error occurred on the server" });
+        }
       });
   });
 }
