@@ -98,16 +98,17 @@ function login(req, res) {
           return Promise.reject(new Error("Incorrect email or password"));
         }
 
-        const token = jwt.sign({ _id: existingUser._id }, JWT_SECRET, {
-          expiresIn: "120ms",
+        const token = jwt.sign({ _id: existingUser._id }, String(JWT_SECRET), {
+          expiresIn: "7d",
         });
         res.status(200).send({ data: token });
         return existingUser;
       })
       .catch((e) => {
         console.error(e);
+        console.log(e.name);
 
-        if (e.name === "Incorrect email or password") {
+        if (e.message === "Incorrect email or password") {
           res
             .status(unauthorizedError)
             .send({ message: "Incorrect email or password" });
