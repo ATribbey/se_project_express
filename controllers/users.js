@@ -49,6 +49,31 @@ function getUser(req, res) {
     });
 }
 
+function getCurrentUser(req, res) {
+  User.findById(req.user._id)
+    .orFail()
+    .then((currentUser) => {
+      res.status(200).send({ data: currentUser });
+    })
+    .catch((e) => {
+      console.error(e);
+
+      if (e.name === "ValidationError") {
+        res.status(invalidDataError).send({ message: "Invalid data" });
+      } else if (e.name === "CastError") {
+        res.status(invalidDataError).send({ message: "Invalid data" });
+      } else if (e.name === "DocumentNotFoundError") {
+        res
+          .status(notFoundError)
+          .send({ message: "Requested resource not found" });
+      } else {
+        res
+          .status(serverError)
+          .send({ message: "An error occurred on the server" });
+      }
+    });
+}
+
 function createUser(req, res) {
   const { name, avatar, email, password } = req.body;
 
