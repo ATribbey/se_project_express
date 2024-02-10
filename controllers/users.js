@@ -149,4 +149,4 @@ function login(req, res) {
   });
 }
 
-module.exports = { getUsers, getUser, createUser, login };
+module.exports = { getUsers, getUser, getCurrentUser, createUser, login };
