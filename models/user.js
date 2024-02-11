@@ -41,17 +41,17 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(
   email,
   password,
 ) {
-  return this.findOne({ email }).then((user) => {
-    if (!user) {
+  return this.findOne({ email }).then((existingUser) => {
+    if (!existingUser) {
       return Promise.reject(new Error("Incorrect email or password"));
     }
 
-    return bcrypt.compare(password, user.password).then((matched) => {
+    return bcrypt.compare(password, existingUser.password).then((matched) => {
       if (!matched) {
         return Promise.reject(new Error("Incorrect email or password"));
       }
 
-      return user; // now user is available
+      return existingUser; // now user is available
     });
   });
 };
