@@ -48,7 +48,10 @@ function createItem(req, res) {
 }
 
 function deleteItem(req, res) {
-  clothingItem
+  if (!req.params.id === req.user._id) {
+    return Promise.reject(new Error("Cannot delete item of another user"));
+  }
+  return clothingItem
     .findByIdAndDelete(req.params.id)
     .orFail()
     .then((item) => {

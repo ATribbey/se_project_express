@@ -10,6 +10,14 @@ const app = express();
 mongoose.set("strictQuery", true);
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
 
+// TEMPORARY WORKAROUND FOR OWNER PROPERTY
+app.use((req, res, next) => {
+  req.user = {
+    _id: "65b581c3a6b301d47eb626d1",
+  };
+  next();
+});
+
 const routes = require("./routes");
 
 app.use(express.json());
@@ -19,7 +27,7 @@ app.post("/signup", createUser);
 app.post("/signin", login);
 app.get("/items", getItems);
 
-app.use(auth);
+// app.use(auth);
 app.use(routes);
 
 const { PORT = 3001 } = process.env;
