@@ -74,6 +74,36 @@ function getCurrentUser(req, res) {
     });
 }
 
+function updateCurrentUser(req, res) {
+  const { name, avatar } = req.body;
+
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, avatar },
+    { new: true, runValidators: true },
+  )
+    .then((updatedUser) => {
+      res.status(200).send({ data: updatedUser });
+    })
+    .catch((e) => {
+      console.error(e);
+
+      if (e.name === "ValidationError") {
+        res.status(invalidDataError).send({ message: "Invalid data" });
+      } else if (e.name === "CastError") {
+        res.status(invalidDataError).send({ message: "Invalid data" });
+      } else if (e.name === "DocumentNotFoundError") {
+        res
+          .status(notFoundError)
+          .send({ message: "Requested resource not found" });
+      } else {
+        res
+          .status(serverError)
+          .send({ message: "An error occurred on the server" });
+      }
+    });
+}
+
 function createUser(req, res) {
   const { name, avatar, email, password } = req.body;
 
@@ -149,4 +179,11 @@ function login(req, res) {
   });
 }
 
-module.exports = { getUsers, getUser, getCurrentUser, createUser, login };
+module.exports = {
+  getUsers,
+  getUser,
+  getCurrentUser,
+  updateCurrentUser,
+  createUser,
+  login,
+};
