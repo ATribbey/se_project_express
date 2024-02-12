@@ -52,9 +52,11 @@ function getUser(req, res) {
 
 function getCurrentUser(req, res) {
   User.findById(req.user._id)
-    .orFail()
     .then((currentUser) => {
-      res.status(200).send({ data: currentUser });
+      if (!currentUser) {
+        return Promise.reject(new Error("User not found"));
+      }
+      return res.status(200).send({ data: currentUser });
     })
     .catch((e) => {
       console.error(e);
@@ -67,6 +69,8 @@ function getCurrentUser(req, res) {
         res
           .status(notFoundError)
           .send({ message: "Requested resource not found" });
+      } else if (e.message === "User not found") {
+        res.status(notFoundError).send({ message: "User not found" });
       } else {
         res
           .status(serverError)
@@ -108,41 +112,37 @@ function updateCurrentUser(req, res) {
 function createUser(req, res) {
   const { name, avatar, email, password } = req.body;
 
-  User.findOne({ email })
-    .then((existingUser) => {
-      if (existingUser) {
-        throw new Error("Email already in use");
-      }
-    })
-    .catch((e) => {
-      if (e.message === "Email already in use") {
-        res
-          .status(conflictError)
-          .send({ message: "An account with this email already exists" });
-      }
-    });
+  User.findOne({ email }).then((existingUser) => {
+    if (existingUser) {
+      throw new Error("Email already in use");
+    } else {
+      bcrypt.hash(password, 10).then((hash) => {
+        User.create({ name, avatar, email, password: hash })
+          .then((newUser) => {
+            const response = newUser.toObject();
+            delete response.password;
 
-  bcrypt.hash(password, 10).then((hash) => {
-    User.create({ name, avatar, email, password: hash })
-      .then((newUser) => {
-        const response = newUser.toObject();
-        delete response.password;
+            res.status(200).send({ data: response });
+          })
+          .catch((e) => {
+            console.error(e);
 
-        res.status(200).send({ data: response });
-      })
-      .catch((e) => {
-        console.error(e);
-
-        if (e.name === "ValidationError") {
-          res.status(invalidDataError).send({ message: "Invalid data" });
-        } else if (e.name === "CastError") {
-          res.status(invalidDataError).send({ message: "Invalid data" });
-        } else {
-          res
-            .status(serverError)
-            .send({ message: "An error occurred on the server" });
-        }
+            if (e.name === "ValidationError") {
+              res.status(invalidDataError).send({ message: "Invalid data" });
+            } else if (e.name === "CastError") {
+              res.status(invalidDataError).send({ message: "Invalid data" });
+            } else if (e.message === "Email already in use") {
+              res.status(conflictError).send({
+                message: "An account with this email already exists",
+              });
+            } else {
+              res
+                .status(serverError)
+                .send({ message: "An error occurred on the server" });
+            }
+          });
       });
+    }
   });
 }
 
