@@ -8,6 +8,7 @@ const {
   notFoundError,
   serverError,
   unauthorizedError,
+  conflictError,
 } = require("../utils/errors");
 
 function getUsers(req, res) {
@@ -116,7 +117,7 @@ function createUser(req, res) {
     .catch((e) => {
       if (e.message === "Email already in use") {
         res
-          .status(serverError)
+          .status(conflictError)
           .send({ message: "An account with this email already exists" });
       }
     });
@@ -124,7 +125,10 @@ function createUser(req, res) {
   bcrypt.hash(password, 10).then((hash) => {
     User.create({ name, avatar, email, password: hash })
       .then((newUser) => {
-        res.status(200).send({ data: newUser });
+        const response = newUser.toObject();
+        delete response.password;
+
+        res.status(200).send({ data: response });
       })
       .catch((e) => {
         console.error(e);
