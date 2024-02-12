@@ -49,8 +49,14 @@ function createItem(req, res) {
 }
 
 function deleteItem(req, res) {
-  if (!req.params.id === req.user._id) {
-    return Promise.reject(new Error("Cannot delete item of another user"));
+  const { authorization } = req.headers;
+
+  if (!req.params.id === authorization) {
+    Promise.reject(new Error("Cannot delete item of another user"));
+
+    res
+      .status(forbiddenError)
+      .send({ message: "Cannot delete item of another user" });
   }
   return clothingItem
     .findByIdAndDelete(req.params.id)
@@ -69,8 +75,6 @@ function deleteItem(req, res) {
         res
           .status(notFoundError)
           .send({ message: "Requested resource not found" });
-      } else if (e.message === "Cannot delete item of another user") {
-        res.status(forbiddenError).send("Cannot delete item of another user");
       } else {
         res
           .status(serverError)
