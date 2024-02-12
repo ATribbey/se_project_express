@@ -149,7 +149,13 @@ function createUser(req, res) {
 function login(req, res) {
   const { email, password } = req.body;
 
-  User.findUserByCredentials(email, password)
+  if (!email || !password) {
+    return res
+      .status(invalidDataError)
+      .send({ message: "Invalid email or password" });
+  }
+
+  return User.findUserByCredentials(email, password)
     .then((existingUser) => {
       const token = jwt.sign({ _id: existingUser._id }, JWT_SECRET, {
         expiresIn: "7d",
