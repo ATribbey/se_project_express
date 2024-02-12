@@ -11,14 +11,6 @@ const app = express();
 mongoose.set("strictQuery", true);
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
 
-// // TEMPORARY WORKAROUND FOR OWNER PROPERTY
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: "65b581c3a6b301d47eb626d1",
-//   };
-//   next();
-// });
-
 const routes = require("./routes");
 
 app.use(cors());
