@@ -3,6 +3,7 @@ const {
   invalidDataError,
   notFoundError,
   serverError,
+  forbiddenError,
 } = require("../utils/errors");
 
 function getItems(req, res) {
@@ -68,6 +69,8 @@ function deleteItem(req, res) {
         res
           .status(notFoundError)
           .send({ message: "Requested resource not found" });
+      } else if (e.message === "Cannot delete item of another user") {
+        res.status(forbiddenError).send("Cannot delete item of another user");
       } else {
         res
           .status(serverError)

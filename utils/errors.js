@@ -8,12 +8,15 @@ const unauthorizedError = 401;
 
 const conflictError = 409;
 
+const forbiddenError = 403;
+
 module.exports = {
   invalidDataError,
   notFoundError,
   serverError,
   unauthorizedError,
   conflictError,
+  forbiddenError,
 };
 
 /*
