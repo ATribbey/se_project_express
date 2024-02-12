@@ -120,30 +120,31 @@ function createUser(req, res) {
       return bcrypt.hash(password, 10);
     })
     .then((hash) => {
-      User.create({ name, avatar, email, password: hash })
-        .then((newUser) => {
+      return User.create({ name, avatar, email, password: hash }).then(
+        (newUser) => {
           const response = newUser.toObject();
           delete response.password;
 
           res.status(200).send({ data: response });
-        })
-        .catch((e) => {
-          console.error(e);
+        },
+      );
+    })
+    .catch((e) => {
+      console.error(e);
 
-          if (e.name === "ValidationError") {
-            res.status(invalidDataError).send({ message: "Invalid data" });
-          } else if (e.name === "CastError") {
-            res.status(invalidDataError).send({ message: "Invalid data" });
-          } else if (e.message === "Email already in use") {
-            res
-              .status(conflictError)
-              .send({ message: "An account with this email already exists" });
-          } else {
-            res
-              .status(serverError)
-              .send({ message: "An error occurred on the server" });
-          }
-        });
+      if (e.name === "ValidationError") {
+        res.status(invalidDataError).send({ message: "Invalid data" });
+      } else if (e.name === "CastError") {
+        res.status(invalidDataError).send({ message: "Invalid data" });
+      } else if (e.message === "Email already in use") {
+        res
+          .status(conflictError)
+          .send({ message: "An account with this email already exists" });
+      } else {
+        res
+          .status(serverError)
+          .send({ message: "An error occurred on the server" });
+      }
     });
 }
 
