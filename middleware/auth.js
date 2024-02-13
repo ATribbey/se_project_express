@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.sign(token, JWT_SECRET);
+    payload = jwt.verify(token, JWT_SECRET);
   } catch (e) {
     return res
       .status(unauthorizedError)

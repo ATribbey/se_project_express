@@ -54,7 +54,7 @@ function deleteItem(req, res) {
     .orFail()
     .then((item) => {
       if (item.owner !== req.user._id) {
-        Promise.reject(new Error("You are not authorized to delete this item"));
+        throw new Error("You are not authorized to delete this item");
       }
       res.status(200).send({ data: item });
     })
