@@ -49,19 +49,12 @@ function createItem(req, res) {
 }
 
 function deleteItem(req, res) {
-  const { authorization } = req.headers;
-
-  if (!req.params.id === authorization) {
-    Promise.reject(new Error("Cannot delete item of another user"));
-
-    res
-      .status(forbiddenError)
-      .send({ message: "Cannot delete item of another user" });
-  }
   return clothingItem
     .findByIdAndDelete(req.params.id)
     .orFail()
     .then((item) => {
+      console.log(req.user._id);
+      // console.log(item.owner);
       res.status(200).send({ data: item });
     })
     .catch((e) => {
@@ -75,6 +68,10 @@ function deleteItem(req, res) {
         res
           .status(notFoundError)
           .send({ message: "Requested resource not found" });
+      } else if (e.message === "You are not authorized to delete this item") {
+        res
+          .status(forbiddenError)
+          .send({ message: "You are not authorized to delete this item" });
       } else {
         res
           .status(serverError)
