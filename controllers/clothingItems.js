@@ -53,8 +53,9 @@ function deleteItem(req, res) {
     .findByIdAndDelete(req.params.id)
     .orFail()
     .then((item) => {
-      console.log(req.user._id);
-      // console.log(item.owner);
+      if (item.owner !== req.user._id) {
+        Promise.reject(new Error("You are not authorized to delete this item"));
+      }
       res.status(200).send({ data: item });
     })
     .catch((e) => {
