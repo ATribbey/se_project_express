@@ -50,13 +50,15 @@ function createItem(req, res) {
 
 function deleteItem(req, res) {
   return clothingItem
-    .findByIdAndDelete(req.params.id)
+    .findById(req.params.id)
     .orFail()
     .then((item) => {
       if (!item.owner.equals(req.user._id)) {
         throw new Error("You are not authorized to delete this item");
       }
-      res.status(200).send({ data: item });
+      return item.deleteOne().then(() => {
+        res.status(200).send({ data: item, message: "Item deleted" });
+      });
     })
     .catch((e) => {
       console.error(e);
