@@ -63,9 +63,7 @@ function deleteItem(req, res) {
     .catch((e) => {
       console.error(e);
 
-      if (e.name === "ValidationError") {
-        res.status(invalidDataError).send({ message: "Invalid data" });
-      } else if (e.name === "CastError") {
+      if (e.name === "CastError") {
         res.status(invalidDataError).send({ message: "Invalid data" });
       } else if (e.name === "DocumentNotFoundError") {
         res
@@ -97,9 +95,7 @@ function likeItem(req, res) {
     .catch((e) => {
       console.error(e);
 
-      if (e.name === "ValidationError") {
-        res.status(invalidDataError).send({ message: "Invalid data" });
-      } else if (e.name === "CastError") {
+      if (e.name === "CastError") {
         res.status(invalidDataError).send({ message: "Invalid data" });
       } else if (e.name === "DocumentNotFoundError") {
         res
@@ -127,9 +123,7 @@ function dislikeItem(req, res) {
     .catch((e) => {
       console.error(e);
 
-      if (e.name === "ValidationError") {
-        res.status(invalidDataError).send({ message: "Invalid data" });
-      } else if (e.name === "CastError") {
+      if (e.name === "CastError") {
         res.status(invalidDataError).send({ message: "Invalid data" });
       } else if (e.name === "DocumentNotFoundError") {
         res
