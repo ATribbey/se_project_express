@@ -1,4 +1,4 @@
 module.exports = (err, req, res, next) => {
   console.error(err);
-  return res.status(500).send({ message: "This is placeholder text" });
+  return res.status(err.statusCode).send({ message: err.message });
 };
