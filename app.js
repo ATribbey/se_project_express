@@ -5,6 +5,7 @@ const helmet = require("helmet");
 const { createUser, login } = require("./controllers/users");
 const { getItems } = require("./controllers/clothingItems");
 const auth = require("./middleware/auth");
+const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.get("/items", getItems);
 
 app.use(auth);
 app.use(routes);
+app.use(errorHandler);
 
 const { PORT = 3001 } = process.env;
 
