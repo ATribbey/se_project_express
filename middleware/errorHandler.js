@@ -1,5 +1,6 @@
 module.exports = (err, req, res, next) => {
   console.error(err);
+
   if (!err.statusCode) {
     const { statusCode = 500, message } = err;
     return res.status(statusCode).send({
