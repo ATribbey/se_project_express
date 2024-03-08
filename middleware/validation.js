@@ -19,6 +19,7 @@ module.exports.validateNewItem = celebrate({
       "string-empty": "Image Url is required",
       "string.uri": "Image Url must be a valid URL",
     }),
+    weather: Joi.string().required().valid("hot", "warm", "cold"),
   }),
 });
 
@@ -55,7 +56,7 @@ module.exports.validateLogin = celebrate({
 
 module.exports.validateId = celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().hex().length(24).messages({
+    id: Joi.string().hex().length(24).messages({
       "string-hex": "ID must be hexadecimal string",
       "string-length": "ID must be 24 characters in length",
     }),
