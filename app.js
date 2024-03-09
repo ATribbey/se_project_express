@@ -7,6 +7,7 @@ const { createUser, login } = require("./controllers/users");
 const { getItems } = require("./controllers/clothingItems");
 const auth = require("./middleware/auth");
 const errorHandler = require("./middleware/errorHandler");
+const { requestLogger, errorLogger } = require("./middleware/logger");
 
 const app = express();
 
@@ -25,7 +26,9 @@ app.post("/signin", validateLogin, login);
 app.get("/items", getItems);
 
 app.use(auth);
+app.use(requestLogger);
 app.use(routes);
+app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 
