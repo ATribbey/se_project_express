@@ -10,6 +10,6 @@ https://github.com/ATribbey/se_project_react
 
 `npm run dev` — to launch the server with the hot reload feature
 
-### Testing
+### Domain Name for Project
 
-Before committing your code, make sure you edit the file `sprint.txt` in the root folder. The file `sprint.txt` should contain the number of the sprint you're currently working on. For ex. 12
+wtwr.raspberryip.com OR www.wtwr.raspberryip.com
