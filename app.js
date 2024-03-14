@@ -21,6 +21,12 @@ app.use(cors());
 app.use(express.json());
 app.use(helmet());
 
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Server will crash now");
+  }, 0);
+});
+
 app.post("/signup", validateNewUser, createUser);
 app.post("/signin", validateLogin, login);
 app.get("/items", getItems);
