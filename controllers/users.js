@@ -1,7 +1,9 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
-const { JWT_SECRET } = require("../utils/config");
+
+const { NODE_ENV, JWT_SECRET } = process.env;
+const { devSecret } = require("../utils/config");
 
 const BadRequestError = require("../utils/errors/BadRequestError");
 const NotFoundError = require("../utils/errors/NotFoundError");
@@ -89,14 +91,18 @@ function login(req, res, next) {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).send({ message: "Invalid email or password" });
+    next(new BadRequestError("Invalid email or password"));
   }
 
   return User.findUserByCredentials(email, password)
     .then((existingUser) => {
-      const token = jwt.sign({ _id: existingUser._id }, JWT_SECRET, {
-        expiresIn: "7d",
-      });
+      const token = jwt.sign(
+        { _id: existingUser._id },
+        NODE_ENV === "production" ? JWT_SECRET : devSecret,
+        {
+          expiresIn: "7d",
+        },
+      );
 
       res.status(200).send({ data: token });
     })

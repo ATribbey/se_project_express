@@ -1,3 +1,3 @@
-const JWT_SECRET = "HelloIAmTheSecretKey";
+const devSecret = "HelloIAmTheSecretKey";
 
-module.exports = { JWT_SECRET };
+module.exports = { devSecret };

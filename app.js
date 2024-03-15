@@ -9,6 +9,9 @@ const auth = require("./middleware/auth");
 const errorHandler = require("./middleware/errorHandler");
 const { requestLogger, errorLogger } = require("./middleware/logger");
 
+require("dotenv").config();
+console.log(process.env.NODE_ENV);
+
 const app = express();
 
 mongoose.set("strictQuery", true);
@@ -27,12 +30,13 @@ app.get("/crash-test", () => {
   }, 0);
 });
 
+app.use(requestLogger);
+
 app.post("/signup", validateNewUser, createUser);
 app.post("/signin", validateLogin, login);
 app.get("/items", getItems);
 
 app.use(auth);
-app.use(requestLogger);
 app.use(routes);
 app.use(errorLogger);
 app.use(errors());
