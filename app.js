@@ -10,8 +10,6 @@ const auth = require("./middleware/auth");
 const errorHandler = require("./middleware/errorHandler");
 const { requestLogger, errorLogger } = require("./middleware/logger");
 
-console.log(process.env.NODE_ENV);
-
 const app = express();
 
 mongoose.set("strictQuery", true);
