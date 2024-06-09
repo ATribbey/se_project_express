@@ -54,6 +54,31 @@ function updateCurrentUser(req, res, next) {
     });
 }
 
+function updateCurrentUserLocation(req, res, next) {
+  const { coords } = req.body;
+
+  User.findByIdAndUpdate(
+    req.user.id,
+    { coords },
+    { new: true, runValidators: true },
+  )
+    .orFail()
+    .then((updatedUser) => {
+      res.status(200).send({ data: updatedUser });
+    })
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        next(new BadRequestError("Invalid input data"));
+      } else if (err.name === "CastError") {
+        next(new BadRequestError("Invalid input format"));
+      } else if (err.name === "DocumentNotFoundError") {
+        next(new NotFoundError("Cannot update nonexistent user"));
+      } else {
+        next(err);
+      }
+    });
+}
+
 function createUser(req, res, next) {
   const { name, avatar, email, password } = req.body;
 
@@ -118,6 +143,7 @@ function login(req, res, next) {
 module.exports = {
   getCurrentUser,
   updateCurrentUser,
+  updateCurrentUserLocation,
   createUser,
   login,
 };
