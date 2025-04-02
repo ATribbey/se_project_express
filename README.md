@@ -9,7 +9,3 @@ https://github.com/ATribbey/se_project_react
 `npm run start` — to launch the server
 
 `npm run dev` — to launch the server with the hot reload feature
-
-### Domain Name for Project
-
-wtwr.raspberryip.com OR www.wtwr.raspberryip.com
